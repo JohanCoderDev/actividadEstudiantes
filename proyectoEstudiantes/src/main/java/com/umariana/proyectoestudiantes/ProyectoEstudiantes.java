@@ -69,21 +69,20 @@ public class ProyectoEstudiantes {
                             
                         if (inUse != true) {
                                                        
-                            System.out.println("------------------------------");
-                           
+                            System.out.println("------------------------------");                          
                             System.out.println("Introduce el nombre del alumno");
                             String nombre = lector.next();
                             if (nombre.matches(".*[0-9].*")) {
-                                throw new InputMismatchException("El valor ingresado es incorrecto.");
+                                throw new InputMismatchException();
                             }
                             
                             System.out.println("------------------------------");
                             System.out.println("Introduce el apellido del alumno");
                             String apellido = lector.next();
                             if (apellido.matches(".*[0-9].*")) {
-                                throw new InputMismatchException("El valor ingresado es incorrecto.");
+                                throw new InputMismatchException();
                             }
-                            
+                         
                             System.out.println("------------------------------");
                             System.out.println("Introduce el semestre del Alumno");
                             int semestre = lector.nextInt();
@@ -94,7 +93,11 @@ public class ProyectoEstudiantes {
                             
                             System.out.println("------------------------------");
                             System.out.println("Introduce el celular del alumno");
-                            int celular = lector.nextInt();
+                            String celular = lector.next();
+                            
+                            if (!celular.matches("\\d+")) {
+                                throw new InputMismatchException();
+                            }
                             
                             System.out.println("------------------------------");
 
@@ -183,7 +186,7 @@ public class ProyectoEstudiantes {
                             }
                             
                             System.out.println("Ingrese el nuevo nombre del Alumno (o enter para mantener el actual):");
-                            String nuevoNombre = lector.nextLine();
+                            String nuevoNombre = lector.next();
                             nuevoNombre = lector.nextLine();
                             if (!nuevoNombre.isEmpty()) {
                                 alumno.setNombre(nuevoNombre);
@@ -222,13 +225,11 @@ public class ProyectoEstudiantes {
                             }
                             
                             System.out.println("Ingrese el nuevo celular del Alumno (o enter para mantener el actual):");
-                            int nuevoCelular;
-                            String nuevoCelularP = lector.nextLine();
-                            if (!nuevoCelularP.isEmpty()) {
-                                nuevoCelular = Integer.parseInt(nuevoCelularP);
+                            String nuevoCelular = lector.nextLine();
+                            if (!nuevoCelular.isEmpty()) {
                                 alumno.setCelular(nuevoCelular);
                             }else{
-                                int sinCambio = alumno.getCelular();
+                                String sinCambio = alumno.getCelular();
                                 alumno.setCelular(sinCambio);
                             }
 
@@ -272,8 +273,9 @@ public class ProyectoEstudiantes {
                         System.out.println("Celular: " + alumno.getCelular());
                         System.out.println("----------------------------");
                         System.out.println("");
-                        lector.nextLine(); // Limpiar el búfer de entrada
                     }
+                       
+                    break;
                     }
                                      
                     break;
