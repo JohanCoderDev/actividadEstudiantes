@@ -6,6 +6,7 @@ package com.umariana.proyectoestudiantes;
 
 import Mundo.Alumno;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -18,8 +19,13 @@ public class ProyectoEstudiantes {
         
         // Función que permite leer la opción del usuario
         Scanner lector = new Scanner(System.in);
+        
         // Bandera que permite terminar el programa
         boolean activo = true;
+        
+        // Bandera que permite terminar el bucle 'while' utilizado en la opcion 1.
+        boolean end;
+                
         ArrayList <Alumno> misAlumnos = new ArrayList<Alumno>();
         
         do{
@@ -35,33 +41,65 @@ public class ProyectoEstudiantes {
         
             switch (opcion) {
                 case 1:
-                    System.out.println("Introduce la cedula del alumno");
-                    int cedula = lector.nextInt();
-                    System.out.println("Introduce el nombre del alumno");
-                    lector.next();
-                    String nombre = lector.next();
-                    System.out.println("Introduce el apellido del alumno");
-                    String apellido = lector.next();
-                    System.out.println("Introduce el semestre del estudiante");
-                    int semestre = lector.nextInt();
-                    System.out.println("Introduce el correo del alumno");
-                    String correo = lector.next();
-                    System.out.println("Introduce el celular del alumno");
-                    int celular = lector.nextInt();
                     
+                    // Iniciamos la bandera en true para ejecutar el bucle 'while'
+                    end = true;
+                    
+                    // Empleamos un bucle 'while' para solicitar nuevamente el dato en caso de que no sea válido.
+                    while(end == true){
+                        
+                    try {
+                        
+                        System.out.println("Introduce la cedula del alumno");
+                        int cedula = lector.nextInt();
+                        System.out.println("------------------------------");
+                        System.out.println("Introduce el nombre del alumno");
+                        String nombre = lector.next();
+                        System.out.println("------------------------------");
+                        System.out.println("Introduce el apellido del alumno");
+                        String apellido = lector.next();
+                        System.out.println("------------------------------");
+                        System.out.println("Introduce el semestre del estudiante");
+                        int semestre = lector.nextInt();
+                        System.out.println("------------------------------");
+                        System.out.println("Introduce el correo del alumno");
+                        String correo = lector.next();
+                        System.out.println("------------------------------");
+                        System.out.println("Introduce el celular del alumno");
+                        int celular = lector.nextInt();
+                        System.out.println("------------------------------");
+                        
+                        System.out.println("");
+                        System.out.println("Alumno agregado exitosamente.");
+                        System.out.println("");
+                        System.out.println("------------------------------");
+                        System.out.println("");
+                        
+                        
                     //Se crea un objeto para guardar la información de cada alumno
-                    //Alumno a = new Alumno(cedula, nombre, apellido, semestre, correo, celular);
-                    Alumno a = new Alumno();
+                    Alumno a = new Alumno(cedula, nombre, apellido, semestre, correo, celular);
                     
-                    a.setCedula(cedula);
-                    a.setNombre(nombre);
-                    a.setApellido(apellido);
-                    a.setSemestre(semestre);
-                    a.setCorreo(correo);
-                    a.setCelular(celular);
+                    //Almacenamos el alumno en nuestro array
+                    misAlumnos.add(a);
                     
+                    //Cerramos el bucle 'while'
+                    end = false;
                     
                     break;
+                    
+                    }catch(InputMismatchException e) {
+                            System.out.println("");
+                            System.out.println("========================================");
+                            System.out.println("Error: Debes ingresar un valor válido.");
+                            System.out.println("Por favor, ingresa los datos nuevamente.");
+                            System.out.println("========================================");
+                            System.out.println("");
+                            lector.nextLine(); // Limpiar el búfer de entrada
+                        }
+                    }
+                    
+                    break;
+                    
                 case 2:
                     System.out.println("opcion dos");
                     break;
@@ -69,7 +107,22 @@ public class ProyectoEstudiantes {
                     System.out.println("opcion tres");
                     break;
                 case 4:
-                    System.out.println("opcion cuatro");
+                    
+                    System.out.println("Registro Académico de Estudiantes");
+                    System.out.println("=================================");
+                    
+                    for (int i = 0; i < misAlumnos.size(); i++) {
+                        Alumno alumno = misAlumnos.get(i);
+                        System.out.println("Alumno: " + (i+1));
+                        System.out.println("Cédula: " + alumno.getCedula());
+                        System.out.println("Nombre: " + alumno.getNombre());
+                        System.out.println("Apellido: " + alumno.getApellido());
+                        System.out.println("Semestre: " + alumno.getSemestre());
+                        System.out.println("Correo: " + alumno.getCorreo());
+                        System.out.println("Celular: " + alumno.getCelular());
+                        System.out.println("----------------------------");
+                    }
+                   
                     break;
                 case 5:
                     System.out.println("opcion cinco");
