@@ -20,26 +20,24 @@ public class ProyectoEstudiantes {
 
     public static void main(String[] args) throws IOException {
         
-        // Función que permite leer la opción del usuario
-        Scanner lector = new Scanner(System.in);
-        
         // Función que permite leer la opcion del usuario de manera mas controlada
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         
+        // Función que permite leer la opción del usuario
+        Scanner lector = new Scanner(System.in);
+        
         // Bandera que permite terminar el programa
         boolean activo = true;
-        
-        // Bandera que permite terminar el bucle 'while' utilizado en la opcion 1.
-        boolean end;
                 
+        //Creamos el array donde almacenaremos a nuestros estudiantes.
         ArrayList <Alumno> misAlumnos = new ArrayList<Alumno>();
         
         do{
         System.out.println("-----------MENU DE OPCIONES-----------");
-        System.out.println("1. Insertar alumno");
-        System.out.println("2. Eliminar alumno");
-        System.out.println("3. Modificar alumno");
-        System.out.println("4. Consultar alumno");
+        System.out.println("1. Insertar estudiante");
+        System.out.println("2. Eliminar estudiante");
+        System.out.println("3. Modificar estudiante");
+        System.out.println("4. Consultar estudiante");
         System.out.println("5. Terminar programa");
         System.out.println("--------------------------------------");
         
@@ -50,7 +48,55 @@ public class ProyectoEstudiantes {
                 //============================================================== 
                 case 1:
                     
-                    // Iniciamos la bandera en true para ejecutar el bucle 'while'
+                    agregarEstudiante(misAlumnos, new BufferedReader(new InputStreamReader(System.in)), lector);
+                   
+                    break;
+                    
+                //==============================================================    
+                case 2:
+                    
+                    eliminarEstudiante(misAlumnos, new BufferedReader(new InputStreamReader(System.in)));
+                    
+                    break;
+                    
+                //==============================================================  
+                case 3:
+                    
+                    modificarEstudiante(misAlumnos, new BufferedReader(new InputStreamReader(System.in)), lector);
+                    
+                    break;
+                            
+                //==============================================================            
+                case 4:
+                    
+                    consultarEstudiante(misAlumnos);
+                    
+                    break;
+                
+                //============================================================== 
+                case 5:
+                    System.out.println("");
+                    System.out.println("Ejecución del programa finalizada :)");
+                    System.out.println("");
+                    activo = false;
+                    break;
+                default:
+                    System.out.println("Debe seleccionar una de las opciones del menu");
+                    break;
+            }
+                
+                
+        }while(activo == true);
+        
+        
+    }
+    
+     public static void agregarEstudiante(ArrayList<Alumno> misAlumnos, BufferedReader reader, Scanner lector) throws IOException {
+         
+         // Bandera que permite terminar el bucle 'while' utilizado en la opcion 1.
+        boolean end;
+        
+         // Iniciamos la bandera en true para ejecutar el bucle 'while'
                     end = true;
                     
                     // Empleamos un bucle 'while' para solicitar nuevamente el dato en caso de que no sea válido.
@@ -62,7 +108,7 @@ public class ProyectoEstudiantes {
                         boolean inUse = false;
                         
                         System.out.println("");
-                        System.out.println("Introduce la cedula del alumno");
+                        System.out.println("Introduce la cedula del estudiante");
                         String cedula = reader.readLine();
                         if (!cedula.matches("\\d+")) {
                                 throw new InputMismatchException();
@@ -72,7 +118,7 @@ public class ProyectoEstudiantes {
                         Proceso utilizado para comprobar la existencia previa de la cédula ingresada
                         */
                         for (Alumno alumno : misAlumnos) {
-                            if(alumno.getCedula() == cedula){
+                            if(alumno.getCedula().equals(cedula)){
                                 inUse = true;
                             }
                             
@@ -81,29 +127,29 @@ public class ProyectoEstudiantes {
                         if (inUse != true) {
                                                        
                             System.out.println("------------------------------");                          
-                            System.out.println("Introduce el nombre del alumno");
+                            System.out.println("Introduce el nombre del estudiante");
                             String nombre = reader.readLine();
                             if (nombre.matches(".*[0-9].*")) {
                                 throw new InputMismatchException();
                             }
                             
                             System.out.println("------------------------------");
-                            System.out.println("Introduce el apellido del alumno");
+                            System.out.println("Introduce el apellido del estudiante");
                             String apellido = reader.readLine();
                             if (apellido.matches(".*[0-9].*")) {
                                 throw new InputMismatchException();
                             }
                          
                             System.out.println("------------------------------");
-                            System.out.println("Introduce el semestre del Alumno");
+                            System.out.println("Introduce el semestre del estudiante");
                             int semestre = lector.nextInt();
                             
                             System.out.println("------------------------------");
-                            System.out.println("Introduce el correo del alumno");
+                            System.out.println("Introduce el correo del estudiante");
                             String correo = lector.next();
                             
                             System.out.println("------------------------------");
-                            System.out.println("Introduce el celular del alumno");
+                            System.out.println("Introduce el celular del estudiante");
                             String celular = reader.readLine();
                             
                             if (!celular.matches("\\d+")) {
@@ -113,7 +159,7 @@ public class ProyectoEstudiantes {
                             System.out.println("------------------------------");
 
                             System.out.println("");
-                            System.out.println("Alumno agregado exitosamente.");
+                            System.out.println("Estudiante agregado exitosamente.");
                             System.out.println("");
                             System.out.println("------------------------------");
                             System.out.println("");
@@ -123,13 +169,9 @@ public class ProyectoEstudiantes {
                             Alumno a = new Alumno(cedula, nombre, apellido, semestre, correo, celular);
 
                             //Almacenamos el alumno en nuestro array
-                            misAlumnos.add(a);
+                            misAlumnos.add(a);  
                             
-                            
-                            
-                        
-                        }
-                        else{
+                        }else{                       
                             System.out.println("------------------------------");
                             System.out.println("La cédula ingresada ya se encuentra registrada en el sistema.");
                             System.out.println("------------------------------");
@@ -153,19 +195,14 @@ public class ProyectoEstudiantes {
                             lector.nextLine(); // Limpiar el búfer de entrada
                         }
                     }
-                    
-                    break;
-                    
-                //==============================================================    
-                case 2:
-                    System.out.println("");
-                    System.out.println("opcion dos");
-                    break;
-                    
-                //==============================================================  
-                case 3:
-                    System.out.println("");
-                    System.out.println("Ingrese la cédula del Alumno que desea modificar:");
+  
+     }
+     
+     
+     public static void modificarEstudiante(ArrayList<Alumno> misAlumnos, BufferedReader reader, Scanner lector) throws IOException 
+     {
+     System.out.println("");
+                    System.out.println("Ingrese la cédula del estudiante que desea modificar:");
                     String cedulaModificar = reader.readLine();
     
                     boolean encontrado = false;
@@ -175,7 +212,7 @@ public class ProyectoEstudiantes {
                             encontrado = true;
 
                             // Mostrar los campos actuales del estudiante
-                            System.out.println("Datos actuales del Alumno:");
+                            System.out.println("Datos actuales del estudiante: ");
                             System.out.println("Cédula: " + alumno.getCedula());
                             System.out.println("Nombre: " + alumno.getNombre());
                             System.out.println("Apellido: " + alumno.getApellido());
@@ -189,7 +226,7 @@ public class ProyectoEstudiantes {
                             // Solicitar los nuevos valores para los campos que se desean modificar
                             
                             //Solicitar la nueva cedula
-                            System.out.println("Ingrese la nueva cedula del Alumno (o enter para mantener el actual):"); 
+                            System.out.println("Ingrese la nueva cedula del estudiante (o enter para mantener el actual):"); 
                             String nuevaCedula = reader.readLine();
                             
                             if (!nuevaCedula.isEmpty()) {
@@ -209,7 +246,7 @@ public class ProyectoEstudiantes {
                             
                             
                             //Solicitar el nuevo nombre
-                            System.out.println("Ingrese el nuevo nombre del Alumno (o enter para mantener el actual):");
+                            System.out.println("Ingrese el nuevo nombre del estudiante (o enter para mantener el actual):");
                             String nuevoNombre = reader.readLine();
                             
                             if (!nuevoNombre.isEmpty()) {                               
@@ -228,7 +265,7 @@ public class ProyectoEstudiantes {
                             
                             
                             //Solicitar el nuevo apellido
-                            System.out.println("Ingrese el nuevo apellido del Alumno (o enter para mantener el actual):");
+                            System.out.println("Ingrese el nuevo apellido del estudiante (o enter para mantener el actual):");
                             String nuevoApellido = reader.readLine();
                             
                             if (!nuevoApellido.isEmpty()) {
@@ -247,7 +284,7 @@ public class ProyectoEstudiantes {
                             
                             
                             //Solicitar el nuevo semestre
-                            System.out.println("Ingrese el nuevo semestre del Alumno (o enter para mantener el actual):");
+                            System.out.println("Ingrese el nuevo semestre del estudiante (o enter para mantener el actual):");
                             int nuevoSemestre;
                             String nuevoSemestreP = reader.readLine();
                             if (!nuevoSemestreP.isEmpty()) {
@@ -263,7 +300,7 @@ public class ProyectoEstudiantes {
                             
                             
                             //Solicitar el nuevo correo electrónico
-                            System.out.println("Ingrese el nuevo correo electrónico del Alumno (o enter para mantener el actual):");
+                            System.out.println("Ingrese el nuevo correo electrónico del estudiante (o enter para mantener el actual):");
                             String nuevoCorreo = reader.readLine();
                             if (!nuevoCorreo.isEmpty()) {
                                 alumno.setCorreo(nuevoCorreo);
@@ -277,7 +314,7 @@ public class ProyectoEstudiantes {
                             
                             
                             //Solicitar el nuevo celular
-                            System.out.println("Ingrese el nuevo celular del Alumno (o enter para mantener el actual):");
+                            System.out.println("Ingrese el nuevo celular del estudiante (o enter para mantener el actual):");
                             String nuevoCelular = reader.readLine();
                             if (!nuevoCelular.isEmpty()) {
                                 if (!nuevoCelular.matches("\\d+")) {
@@ -324,20 +361,19 @@ public class ProyectoEstudiantes {
                     if (!encontrado) {
                         System.out.println("No se encontró un estudiante con la cédula ingresada.");
                     }
-                            break;
-                            
-                //==============================================================            
-                case 4:
-                    if (misAlumnos.isEmpty()) {
+     }
+     
+     public static void consultarEstudiante(ArrayList<Alumno> misAlumnos){
+         if (misAlumnos.isEmpty()) {
                             System.out.println("No hay ningún estudiante en el sistema.");
                         }else{
-                        System.out.println("Registro Académico de Alumnos");
+                        System.out.println("Registro Académico de Estudiantes");
                         System.out.println("=================================");
 
                     for (int i = 0; i < misAlumnos.size(); i++) {
                         Alumno alumno = misAlumnos.get(i);
                         System.out.println("----------------------------");
-                        System.out.println("Alumno: " + (i+1));
+                        System.out.println("Estudiante: " + (i+1));
                         System.out.println("Cédula: " + alumno.getCedula());
                         System.out.println("Nombre: " + alumno.getNombre());
                         System.out.println("Apellido: " + alumno.getApellido());
@@ -347,27 +383,28 @@ public class ProyectoEstudiantes {
                         System.out.println("----------------------------");
                         System.out.println("");
                     }
-                       
-                    break;
-                    }
-                                     
-                    break;
-                
-                //============================================================== 
-                case 5:
-                    System.out.println("");
-                    System.out.println("Ejecución del programa finalizada :)");
-                    System.out.println("");
-                    activo = false;
-                    break;
-                default:
-                    System.out.println("Debe seleccionar una de las opciones del menu");
-                    break;
             }
-                
-                
-        }while(activo == true);
-        
-        
+     }
+     
+     
+     public static void eliminarEstudiante(ArrayList<Alumno> misAlumnos, BufferedReader reader) throws IOException {
+         
+     boolean encontrado = false;
+
+         System.out.println("Ingrese la cedula que desea eliminar");
+         String cedulaEliminar = reader.readLine();
+         
+        for (Alumno alumno : misAlumnos ) {
+            if (alumno.getCedula().equals(cedulaEliminar)) {
+                misAlumnos.remove(alumno); // Eliminar el estudiante de la lista
+                encontrado = true;
+                System.out.println("Estudiante eliminado exitosamente.");
+                break;
+            }
+        }
+
+        if (!encontrado) {
+            System.out.println("No se encontró un estudiante con la cédula ingresada.");
+        }
     }
 }

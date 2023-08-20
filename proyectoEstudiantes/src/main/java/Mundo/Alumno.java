@@ -88,6 +88,7 @@ public class Alumno {
     public void setCelular(String celular) {
         this.celular = celular;
     }
+
      
      
     
