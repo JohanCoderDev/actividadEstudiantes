@@ -6,7 +6,7 @@ package Mundo;
 
 /**
  *
- * @author Sistemas
+ * @author Johan Ordoñez
  */
 public class Alumno {
     

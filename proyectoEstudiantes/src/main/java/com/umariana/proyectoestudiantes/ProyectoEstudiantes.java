@@ -14,7 +14,7 @@ import java.util.Scanner;
 
 /**
  *
- * @author Sistemas
+ * @author Johan Ordoñez
  */
 public class ProyectoEstudiantes {
 
