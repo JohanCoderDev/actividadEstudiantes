@@ -5,6 +5,9 @@
 package com.umariana.proyectoestudiantes;
 
 import Mundo.Alumno;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -15,10 +18,13 @@ import java.util.Scanner;
  */
 public class ProyectoEstudiantes {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         
         // Función que permite leer la opción del usuario
         Scanner lector = new Scanner(System.in);
+        
+        // Función que permite leer la opcion del usuario de manera mas controlada
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         
         // Bandera que permite terminar el programa
         boolean activo = true;
@@ -40,6 +46,8 @@ public class ProyectoEstudiantes {
         int opcion = lector.nextInt();
         
             switch (opcion) {
+                
+                //============================================================== 
                 case 1:
                     
                     // Iniciamos la bandera en true para ejecutar el bucle 'while'
@@ -55,7 +63,10 @@ public class ProyectoEstudiantes {
                         
                         System.out.println("");
                         System.out.println("Introduce la cedula del alumno");
-                        int cedula = lector.nextInt();
+                        String cedula = reader.readLine();
+                        if (!cedula.matches("\\d+")) {
+                                throw new InputMismatchException();
+                            }
                         
                         /*
                         Proceso utilizado para comprobar la existencia previa de la cédula ingresada
@@ -71,14 +82,14 @@ public class ProyectoEstudiantes {
                                                        
                             System.out.println("------------------------------");                          
                             System.out.println("Introduce el nombre del alumno");
-                            String nombre = lector.next();
+                            String nombre = reader.readLine();
                             if (nombre.matches(".*[0-9].*")) {
                                 throw new InputMismatchException();
                             }
                             
                             System.out.println("------------------------------");
                             System.out.println("Introduce el apellido del alumno");
-                            String apellido = lector.next();
+                            String apellido = reader.readLine();
                             if (apellido.matches(".*[0-9].*")) {
                                 throw new InputMismatchException();
                             }
@@ -93,7 +104,7 @@ public class ProyectoEstudiantes {
                             
                             System.out.println("------------------------------");
                             System.out.println("Introduce el celular del alumno");
-                            String celular = lector.next();
+                            String celular = reader.readLine();
                             
                             if (!celular.matches("\\d+")) {
                                 throw new InputMismatchException();
@@ -145,19 +156,22 @@ public class ProyectoEstudiantes {
                     
                     break;
                     
+                //==============================================================    
                 case 2:
                     System.out.println("");
                     System.out.println("opcion dos");
                     break;
+                    
+                //==============================================================  
                 case 3:
                     System.out.println("");
                     System.out.println("Ingrese la cédula del Alumno que desea modificar:");
-                    int cedulaModificar = lector.nextInt();
+                    String cedulaModificar = reader.readLine();
     
                     boolean encontrado = false;
     
                     for (Alumno alumno : misAlumnos) {
-                        if (alumno.getCedula() == cedulaModificar) {
+                        if (alumno.getCedula().equals(cedulaModificar)) {
                             encontrado = true;
 
                             // Mostrar los campos actuales del estudiante
@@ -173,74 +187,131 @@ public class ProyectoEstudiantes {
                             try{
                                 
                             // Solicitar los nuevos valores para los campos que se desean modificar
-                            System.out.println("Ingrese la nueva cedula del Alumno (o enter para mantener el actual):");
-                            int nuevaCedula;
-                            String nuevaCedulaP = lector.nextLine();
-                            nuevaCedulaP = lector.nextLine();
-                            if (!nuevaCedulaP.isEmpty()) {
-                                nuevaCedula = Integer.parseInt(nuevaCedulaP);
-                                alumno.setCedula(nuevaCedula);
-                            }else{
-                                int sinCambio = alumno.getCedula();
-                                alumno.setCedula(sinCambio);
+                            
+                            //Solicitar la nueva cedula
+                            System.out.println("Ingrese la nueva cedula del Alumno (o enter para mantener el actual):"); 
+                            String nuevaCedula = reader.readLine();
+                            
+                            if (!nuevaCedula.isEmpty()) {
+                                
+                                if (!nuevaCedula.matches("\\d+")) {                                  
+                                    throw new InputMismatchException();                                   
+                                }else{                                  
+                                    alumno.setCedula(nuevaCedula); 
+                                    System.out.println("-------------------------------");
+                                    System.out.println("Cédula actualizada exitosamente");
+                                    System.out.println("-------------------------------");
+                                }                               
+                            }else{                               
+                                String sinCambio = alumno.getCedula();
+                                alumno.setCedula(sinCambio);                               
                             }
                             
+                            
+                            //Solicitar el nuevo nombre
                             System.out.println("Ingrese el nuevo nombre del Alumno (o enter para mantener el actual):");
-                            String nuevoNombre = lector.next();
-                            nuevoNombre = lector.nextLine();
-                            if (!nuevoNombre.isEmpty()) {
-                                alumno.setNombre(nuevoNombre);
+                            String nuevoNombre = reader.readLine();
+                            
+                            if (!nuevoNombre.isEmpty()) {                               
+                                if (nuevoNombre.matches(".*[0-9].*")) {                                    
+                                    throw new InputMismatchException();                                    
+                                }else{            
+                                    alumno.setNombre(nuevoNombre); 
+                                    System.out.println("-------------------------------");
+                                    System.out.println("Nombre actualizado exitosamente");
+                                    System.out.println("-------------------------------");
+                                }       
                             }else{
                                 String sinCambio = alumno.getNombre();
                                 alumno.setNombre(sinCambio);
                             }
                             
+                            
+                            //Solicitar el nuevo apellido
                             System.out.println("Ingrese el nuevo apellido del Alumno (o enter para mantener el actual):");
-                            String nuevoApellido = lector.nextLine();
+                            String nuevoApellido = reader.readLine();
+                            
                             if (!nuevoApellido.isEmpty()) {
-                                alumno.setApellido(nuevoApellido);
+                                if (nuevoApellido.matches(".*[0-9].*")) {                                    
+                                    throw new InputMismatchException();                                    
+                                }else{                
+                                    alumno.setApellido(nuevoApellido);  
+                                    System.out.println("-------------------------------");
+                                    System.out.println("Apellido actualizado exitosamente");
+                                    System.out.println("-------------------------------");
+                                }         
                             }else{
                                 String sinCambio = alumno.getApellido();
                                 alumno.setApellido(sinCambio);
                             }
                             
+                            
+                            //Solicitar el nuevo semestre
                             System.out.println("Ingrese el nuevo semestre del Alumno (o enter para mantener el actual):");
                             int nuevoSemestre;
-                            String nuevoSemestreP = lector.nextLine();
+                            String nuevoSemestreP = reader.readLine();
                             if (!nuevoSemestreP.isEmpty()) {
                                 nuevoSemestre = Integer.parseInt(nuevoSemestreP);
                                 alumno.setSemestre(nuevoSemestre);
+                                System.out.println("-------------------------------");
+                                System.out.println("Semestre actualizado exitosamente");
+                                System.out.println("-------------------------------");
                             }else{
                                 int sinCambio = alumno.getSemestre();
                                 alumno.setSemestre(sinCambio);
                             }
                             
+                            
+                            //Solicitar el nuevo correo electrónico
                             System.out.println("Ingrese el nuevo correo electrónico del Alumno (o enter para mantener el actual):");
-                            String nuevoCorreo = lector.nextLine();
+                            String nuevoCorreo = reader.readLine();
                             if (!nuevoCorreo.isEmpty()) {
                                 alumno.setCorreo(nuevoCorreo);
+                                System.out.println("-------------------------------");
+                                System.out.println("Correo actualizado exitosamente");
+                                System.out.println("-------------------------------");
                             }else{
                                 String sinCambio = alumno.getCorreo();
                                 alumno.setCorreo(sinCambio);
                             }
                             
+                            
+                            //Solicitar el nuevo celular
                             System.out.println("Ingrese el nuevo celular del Alumno (o enter para mantener el actual):");
-                            String nuevoCelular = lector.nextLine();
+                            String nuevoCelular = reader.readLine();
                             if (!nuevoCelular.isEmpty()) {
-                                alumno.setCelular(nuevoCelular);
+                                if (!nuevoCelular.matches("\\d+")) {
+                                throw new InputMismatchException();
+                                }else{
+                                   alumno.setCelular(nuevoCelular); 
+                                   System.out.println("-------------------------------");
+                                    System.out.println("Celular actualizado exitosamente");
+                                    System.out.println("-------------------------------");
+                                }                                
                             }else{
                                 String sinCambio = alumno.getCelular();
                                 alumno.setCelular(sinCambio);
                             }
 
                             // Mostrar un mensaje de éxito
+                            System.out.println("");
+                            System.out.println("===================================");
                             System.out.println("Estudiante modificado exitosamente.");
-                            } catch (NumberFormatException e) {
+                            System.out.println("===================================");
+                            System.out.println("");
+                            } catch (InputMismatchException e) {
                                                 
                                 System.out.println("");
                                 System.out.println("========================================");
                                 System.out.println("Error: Debes ingresar valores válidos.");
-                                System.out.println("Presione Enter para volver al MENÚ");
+                                System.out.println("========================================");
+                                System.out.println("");
+                                lector.nextLine(); // Limpiar el búfer de entrada
+                                break;
+                            } catch (NumberFormatException e){
+                                System.out.println("");
+                                System.out.println("========================================");
+                                System.out.println("Error: Debes ingresar valores válidos.");
                                 System.out.println("========================================");
                                 System.out.println("");
                                 lector.nextLine(); // Limpiar el búfer de entrada
@@ -254,6 +325,8 @@ public class ProyectoEstudiantes {
                         System.out.println("No se encontró un estudiante con la cédula ingresada.");
                     }
                             break;
+                            
+                //==============================================================            
                 case 4:
                     if (misAlumnos.isEmpty()) {
                             System.out.println("No hay ningún estudiante en el sistema.");
@@ -279,7 +352,8 @@ public class ProyectoEstudiantes {
                     }
                                      
                     break;
-                    
+                
+                //============================================================== 
                 case 5:
                     System.out.println("");
                     System.out.println("Ejecución del programa finalizada :)");

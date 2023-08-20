@@ -11,7 +11,7 @@ package Mundo;
 public class Alumno {
     
     
-     private int cedula;
+     private String cedula;
      
      
      private String nombre;
@@ -32,7 +32,7 @@ public class Alumno {
      public Alumno(){
     }
 
-    public Alumno(int cedula, String nombre, String apellido, int semestre, String correo, String celular) {
+    public Alumno(String cedula, String nombre, String apellido, int semestre, String correo, String celular) {
         this.cedula = cedula;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -41,11 +41,11 @@ public class Alumno {
         this.celular = celular;
     }
 
-    public int getCedula() {
+    public String getCedula() {
         return cedula;
     }
 
-    public void setCedula(int cedula) {
+    public void setCedula(String cedula) {
         this.cedula = cedula;
     }
 
