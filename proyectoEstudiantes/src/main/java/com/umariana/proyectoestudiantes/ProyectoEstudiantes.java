@@ -424,6 +424,7 @@ public class ProyectoEstudiantes {
                 System.out.println("----------------------------------");
                 System.out.println("El estudiante " + alumno.getNombre() + " " + alumno.getApellido() + " fue eliminado exitosamente");
                 System.out.println("----------------------------------");
+                System.out.println("");
                 break;
             }
         }
@@ -434,4 +435,5 @@ public class ProyectoEstudiantes {
             System.out.println("-----------------------------------------------------");
         }
     }
+     
 }
