@@ -105,108 +105,108 @@ public class ProyectoEstudiantes {
      */
     public static void agregarEstudiante(ArrayList<Alumno> misAlumnos, BufferedReader reader, Scanner lector) throws IOException {
          
-            // Bandera que permite terminar el bucle 'while' utilizado en la opcion 1.
-            boolean end;
-        
-            // Iniciamos la bandera en true para ejecutar el bucle 'while'
-            end = true;
-                    
-            // Empleamos un bucle 'while' para solicitar nuevamente el dato en caso de que no sea válido.
-            while(end == true){
-                        
-                try {
+    // Bandera que permite terminar el bucle 'while' utilizado en la opcion 1.
+    boolean end;
 
-                    // Variable utilizada para verificar si la cédula ya está registrada.
-                    boolean inUse = false;
+    // Iniciamos la bandera en true para ejecutar el bucle 'while'
+    end = true;
 
-                    System.out.println("");
-                    System.out.println("Introduce la cedula del estudiante");
-                    String cedula = reader.readLine();
-                    if (!cedula.matches("\\d+")) {
-                            throw new InputMismatchException();
-                        }
+    // Empleamos un bucle 'while' para solicitar nuevamente el dato en caso de que no sea válido.
+    while(end == true){
 
-                    /*
-                    Proceso utilizado para comprobar la existencia previa de la cédula ingresada
-                    */
-                    for (Alumno alumno : misAlumnos) {
-                        if(alumno.getCedula().equals(cedula)){
-                            inUse = true;
-                        }
+        try {
 
-                    }
+            // Variable utilizada para verificar si la cédula ya está registrada.
+            boolean inUse = false;
 
-                    if (inUse != true) {
-
-                        System.out.println("------------------------------");                          
-                        System.out.println("Introduce el nombre del estudiante");
-                        String nombre = reader.readLine();
-                        if (nombre.matches(".*[0-9].*")) {
-                            throw new InputMismatchException();
-                        }
-
-                        System.out.println("------------------------------");
-                        System.out.println("Introduce el apellido del estudiante");
-                        String apellido = reader.readLine();
-                        if (apellido.matches(".*[0-9].*")) {
-                            throw new InputMismatchException();
-                        }
-
-                        System.out.println("------------------------------");
-                        System.out.println("Introduce el semestre del estudiante");
-                        int semestre = lector.nextInt();
-
-                        System.out.println("------------------------------");
-                        System.out.println("Introduce el correo del estudiante");
-                        String correo = lector.next();
-
-                        System.out.println("------------------------------");
-                        System.out.println("Introduce el celular del estudiante");
-                        String celular = reader.readLine();
-
-                        if (!celular.matches("\\d+")) {
-                            throw new InputMismatchException();
-                        }
-
-                        System.out.println("------------------------------");
-
-                        System.out.println("");
-                        System.out.println("Estudiante agregado exitosamente.");
-                        System.out.println("");
-                        System.out.println("------------------------------");
-                        System.out.println("");
-
-
-                        // Se crea un objeto para guardar la información de cada alumno
-                        Alumno a = new Alumno(cedula, nombre, apellido, semestre, correo, celular);
-
-                        //Almacenamos el alumno en nuestro array
-                        misAlumnos.add(a);  
-
-                    }else{                       
-                        System.out.println("------------------------------");
-                        System.out.println("La cédula ingresada ya se encuentra registrada en el sistema.");
-                        System.out.println("------------------------------");
-                        System.out.println("");
-                    }
-
-
-
-                //Cerramos el bucle 'while'
-                end = false;
-
-                break;
-
-                }catch(InputMismatchException e) {
-                        System.out.println("");
-                        System.out.println("========================================");
-                        System.out.println("Error: Debes ingresar un valor válido.");
-                        System.out.println("Por favor, ingresa los datos nuevamente.");
-                        System.out.println("========================================");
-                        System.out.println("");
-                        lector.nextLine(); // Limpiar el búfer de entrada
-                    }
+            System.out.println("");
+            System.out.println("Introduce la cedula del estudiante");
+            String cedula = reader.readLine();
+            if (!cedula.matches("\\d+")) {
+                    throw new InputMismatchException();
                 }
+
+            /*
+            Proceso utilizado para comprobar la existencia previa de la cédula ingresada
+            */
+            for (Alumno alumno : misAlumnos) {
+                if(alumno.getCedula().equals(cedula)){
+                    inUse = true;
+                }
+
+            }
+
+            if (inUse != true) {
+
+                System.out.println("------------------------------");                          
+                System.out.println("Introduce el nombre del estudiante");
+                String nombre = reader.readLine();
+                if (nombre.matches(".*[0-9].*")) {
+                    throw new InputMismatchException();
+                }
+
+                System.out.println("------------------------------");
+                System.out.println("Introduce el apellido del estudiante");
+                String apellido = reader.readLine();
+                if (apellido.matches(".*[0-9].*")) {
+                    throw new InputMismatchException();
+                }
+
+                System.out.println("------------------------------");
+                System.out.println("Introduce el semestre del estudiante");
+                int semestre = lector.nextInt();
+
+                System.out.println("------------------------------");
+                System.out.println("Introduce el correo del estudiante");
+                String correo = lector.next();
+
+                System.out.println("------------------------------");
+                System.out.println("Introduce el celular del estudiante");
+                String celular = reader.readLine();
+
+                if (!celular.matches("\\d+")) {
+                    throw new InputMismatchException();
+                }
+
+                System.out.println("------------------------------");
+
+                System.out.println("");
+                System.out.println("Estudiante agregado exitosamente.");
+                System.out.println("");
+                System.out.println("------------------------------");
+                System.out.println("");
+
+
+                // Se crea un objeto para guardar la información de cada alumno
+                Alumno a = new Alumno(cedula, nombre, apellido, semestre, correo, celular);
+
+                //Almacenamos el alumno en nuestro array
+                misAlumnos.add(a);  
+
+            }else{                       
+                System.out.println("------------------------------");
+                System.out.println("La cédula ingresada ya se encuentra registrada en el sistema.");
+                System.out.println("------------------------------");
+                System.out.println("");
+            }
+
+
+
+        //Cerramos el bucle 'while'
+        end = false;
+
+        break;
+
+        }catch(InputMismatchException e) {
+                System.out.println("");
+                System.out.println("========================================");
+                System.out.println("Error: Debes ingresar un valor válido.");
+                System.out.println("Por favor, ingresa los datos nuevamente.");
+                System.out.println("========================================");
+                System.out.println("");
+                lector.nextLine(); // Limpiar el búfer de entrada
+            }
+        }
   
      }
      
@@ -463,6 +463,9 @@ public class ProyectoEstudiantes {
      */
     public static void eliminarEstudiante(ArrayList<Alumno> misAlumnos, BufferedReader reader) throws IOException {
          
+        //Variable utilizada para confirmar la eliminacion del estudiante
+        String confirmar;
+        
         //Variable utilizada para verificar que la cedula del estudiante a eliminar exista
         boolean encontrado = false;
 
@@ -474,13 +477,26 @@ public class ProyectoEstudiantes {
         //Bucle utilizado para buscar la cedula del estudiante a eliminar
         for (Alumno alumno : misAlumnos ) {
             if (alumno.getCedula().equals(cedulaEliminar)) {
-                misAlumnos.remove(alumno); // Eliminar el estudiante de la lista
+                
                 encontrado = true;
-                System.out.println("----------------------------------");
-                System.out.println("El estudiante " + alumno.getNombre() + " " + alumno.getApellido() + " fue eliminado exitosamente");
-                System.out.println("----------------------------------");
-                System.out.println("");
-                break;
+                System.out.println("Por favor, confirma la eliminación del estudiante: " + alumno.getNombre() + " " + alumno.getApellido() + ", con cédula: " + alumno.getCedula() + "\n" + 
+                                   "\nEscribe 'si' para proceder con la eliminación. Si digitas algo diferente, la acción no se realizará.");
+                confirmar = reader.readLine();
+                
+                if(confirmar.equals("si")){
+                    misAlumnos.remove(alumno); // Eliminar el estudiante de la lista
+                    encontrado = true;
+                    System.out.println("----------------------------------");
+                    System.out.println("El estudiante " + alumno.getNombre() + " " + alumno.getApellido() + " fue eliminado exitosamente");
+                    System.out.println("----------------------------------");
+                    System.out.println("");
+                    break;
+                }else if(!confirmar.equals("si")){
+                    System.out.println("---------------------------------------------");
+                    System.out.println("Eliminación cancelada: Gracias por confirmar.");
+                    System.out.println("---------------------------------------------");
+                }
+                
             }
         }
 
