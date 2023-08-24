@@ -6,8 +6,12 @@ package com.umariana.proyectoestudiantes;
 
 import Mundo.Alumno;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -34,17 +38,11 @@ public class ProyectoEstudiantes {
         
         do{
             
-        //MENU de opciones
-        System.out.println("-----------MENU DE OPCIONES-----------");
-        System.out.println("1. Insertar estudiante");
-        System.out.println("2. Eliminar estudiante");
-        System.out.println("3. Modificar estudiante");
-        System.out.println("4. Consultar estudiante");
-        System.out.println("5. Terminar programa");
-        System.out.println("--------------------------------------");
-        
-        int opcion = lector.nextInt();
-        
+            Menu();
+            try{
+               
+                int opcion = lector.nextInt(); 
+                   
             //Bucle que permite repetir el programa hasta que el usuario elija la opción 5
             switch (opcion) {
 
@@ -78,22 +76,138 @@ public class ProyectoEstudiantes {
                 //============================================================== 
                 case 5: // Finalizar programa
                     
+                    obtenerReporteSemestre(misAlumnos,  lector);
+                    
+                    break;
+                    
+                //============================================================== 
+                case 6: //Leer archivo
+                
+                    leerArchivo(misAlumnos);
+
+                
+                    break;
+                //============================================================== 
+                case 7: //Terminar programa
+                    
                     System.out.println("");
                     System.out.println("Ejecución del programa finalizada :)");
                     System.out.println("");
                     
                     //Actualizamos el valor de la bandera para finalizar el programa
                     activo = false;
-                    break;
+                    
                 default:
                     System.out.println("Debe seleccionar una de las opciones del menu");
                     break;
                     
             }
-                  
+            
+           }catch(InputMismatchException e){
+                System.out.println("Debe seleccionar una de las opciones");
+                
+                lector.next();
+            }       
         }while(activo == true);
                
     }
+    
+    
+    public static void leerArchivo(ArrayList<Alumno> misAlumnos) throws FileNotFoundException, IOException{
+        File archivo = new File("./data/Reporte.txt");
+        FileReader fr = new FileReader(archivo);
+        BufferedReader lector = new BufferedReader(fr);
+        
+        String linea = lector.readLine();
+        
+        while(linea != null)
+        { 
+            
+            String[] datos = linea.split(",");
+            
+            String cedula = datos[0];
+            String nombre  = datos[1];
+            String apellido = datos[2];
+            String semestr = datos[3];
+            String correo = datos[4];
+            String celular = datos[5];
+            
+            int semestre = Integer.parseInt(semestr);
+            
+            Alumno alumno = new Alumno(cedula, nombre, apellido, semestre, correo, celular);
+            misAlumnos.add(alumno);
+            
+        }
+        
+        
+        
+        
+    }
+    
+    
+    public static void obtenerReporteSemestre(ArrayList<Alumno> misAlumnos, Scanner lector) throws FileNotFoundException{
+        
+        System.out.println("Por favor, introduzca el semestre del cual desea generar el informe: ");
+        
+        int semestre = lector.nextInt();
+        
+        //Creamos el archivo con la clase File
+        File archivo = new File("./data/Reporte.txt");
+        
+        //Creamos la pluma para escribir en el archivo
+        PrintWriter pluma = new PrintWriter(archivo);
+        
+            for (Alumno alumno : misAlumnos) {
+                pluma.println("Los estudiantes del semestre " + alumno.getSemestre() + " son: ");
+                pluma.println("");
+                if (alumno.getSemestre() == semestre){
+
+                    
+
+                    pluma.println("-----------------------------------------------------------");
+                    pluma.println("");
+                    pluma.println("Cédula: " + alumno.getCedula());
+                    pluma.println("Nombre: " + alumno.getNombre());
+                    pluma.println("Apellido: " + alumno.getApellido());
+                    pluma.println("Semestre: " + alumno.getSemestre());
+                    pluma.println("Correo: " + alumno.getCorreo());
+                    pluma.println("Celular: " + alumno.getCelular());
+                    pluma.println("");
+
+                    
+                    
+                    System.out.println("Reporte generado exitosamente");
+        }
+        
+        }
+        pluma.close();  
+        
+        if(misAlumnos.isEmpty()){
+            System.out.println("No hay estudiantes registrados");
+        }
+        
+    }
+    
+    
+    public static void Menu(){
+        
+        
+    //MENU de opciones
+        System.out.println("-----------MENU DE OPCIONES-----------");
+        System.out.println("1. Insertar estudiante");
+        System.out.println("2. Eliminar estudiante");
+        System.out.println("3. Modificar estudiante");
+        System.out.println("4. Consultar estudiante");
+        System.out.println("5. Obtener reporte por semestre");
+        System.out.println("6. Leer archivo");
+        System.out.println("7. Terminar programa");
+        System.out.println("--------------------------------------");
+        
+        
+}
+    
+    
+    
     
      /**
      * Método que permite agregar un estudiante a la lista de alumnos.
