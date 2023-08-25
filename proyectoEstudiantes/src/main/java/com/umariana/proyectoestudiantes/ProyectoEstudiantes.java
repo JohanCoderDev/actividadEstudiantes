@@ -36,11 +36,14 @@ public class ProyectoEstudiantes {
         //Creamos el array donde almacenaremos a nuestros estudiantes.
         ArrayList <Alumno> misAlumnos = new ArrayList<Alumno>();
         
+        //Utilizamos el metodo leerArchivo para que cada vez que se inicie el programa se carguen los estudiantes que esten en el documento txt
+        leerArchivo(misAlumnos);
+        
         do{
             
             Menu();
+            
             try{
-               
                 int opcion = lector.nextInt(); 
                    
             //Bucle que permite repetir el programa hasta que el usuario elija la opción 5
@@ -49,6 +52,7 @@ public class ProyectoEstudiantes {
                 case 1: //Agregar estudiante
                     
                     agregarEstudiante(misAlumnos, new BufferedReader(new InputStreamReader(System.in)), lector);
+                    escribirArchivo(misAlumnos, lector);
                    
                     break;
                     
@@ -56,6 +60,7 @@ public class ProyectoEstudiantes {
                 case 2: //Eliminar estudiante
                     
                     eliminarEstudiante(misAlumnos, new BufferedReader(new InputStreamReader(System.in)));
+                    escribirArchivo(misAlumnos, lector);
                     
                     break;
                     
@@ -63,6 +68,7 @@ public class ProyectoEstudiantes {
                 case 3: //Modificar estudiante
                     
                     modificarEstudiante(misAlumnos, new BufferedReader(new InputStreamReader(System.in)), lector);
+                    escribirArchivo(misAlumnos, lector);
                     
                     break;
                             
@@ -74,21 +80,14 @@ public class ProyectoEstudiantes {
                     break;
                 
                 //============================================================== 
-                case 5: // Finalizar programa
+                case 5: // Generar informe por semestre
                     
-                    obtenerReporteSemestre(misAlumnos,  lector);
+                    obtenerReporteSemestre(misAlumnos, lector);
                     
-                    break;
+                    break;    
                     
                 //============================================================== 
-                case 6: //Leer archivo
-                
-                    leerArchivo(misAlumnos);
-
-                
-                    break;
-                //============================================================== 
-                case 7: //Terminar programa
+                case 6: // Terminar programa
                     
                     System.out.println("");
                     System.out.println("Ejecución del programa finalizada :)");
@@ -97,6 +96,8 @@ public class ProyectoEstudiantes {
                     //Actualizamos el valor de la bandera para finalizar el programa
                     activo = false;
                     
+                    break;
+                //==============================================================              
                 default:
                     System.out.println("Debe seleccionar una de las opciones del menu");
                     break;
@@ -113,102 +114,139 @@ public class ProyectoEstudiantes {
     }
     
     
-    public static void leerArchivo(ArrayList<Alumno> misAlumnos) throws FileNotFoundException, IOException{
-        File archivo = new File("./data/Reporte.txt");
-        FileReader fr = new FileReader(archivo);
-        BufferedReader lector = new BufferedReader(fr);
-        
-        String linea = lector.readLine();
-        
-        while(linea != null)
-        { 
-            
-            String[] datos = linea.split(",");
-            
-            String cedula = datos[0];
-            String nombre  = datos[1];
-            String apellido = datos[2];
-            String semestr = datos[3];
-            String correo = datos[4];
-            String celular = datos[5];
-            
-            int semestre = Integer.parseInt(semestr);
-            
-            Alumno alumno = new Alumno(cedula, nombre, apellido, semestre, correo, celular);
-            misAlumnos.add(alumno);
-            
-        }
-        
-        
-        
-        
-    }
     
-    
-    public static void obtenerReporteSemestre(ArrayList<Alumno> misAlumnos, Scanner lector) throws FileNotFoundException{
-        
+    /**
+     * Genera un informe semestral para los estudiantes del semestre especificado.
+     *
+     * @param misAlumnos Lista de alumnos existentes.
+     * @param lector     Scanner para lectura de entrada.
+     * @throws FileNotFoundException Si no se encuentra el archivo de destino.
+     */
+    public static void obtenerReporteSemestre(ArrayList<Alumno> misAlumnos, Scanner lector) throws FileNotFoundException {
+        // Solicitar al usuario el semestre para el informe
         System.out.println("Por favor, introduzca el semestre del cual desea generar el informe: ");
-        
         int semestre = lector.nextInt();
-        
-        //Creamos el archivo con la clase File
-        File archivo = new File("./data/Reporte.txt");
-        
-        //Creamos la pluma para escribir en el archivo
-        PrintWriter pluma = new PrintWriter(archivo);
-        
+
+        // Crear el archivo de informe semestral
+        File archivo = new File("./data/ReporteSemestral.txt");
+
+        try (PrintWriter pluma = new PrintWriter(archivo)) {
+            // Recorrer la lista de alumnos y generar el informe para el semestre especificado
             for (Alumno alumno : misAlumnos) {
-                pluma.println("Los estudiantes del semestre " + alumno.getSemestre() + " son: ");
-                pluma.println("");
-                if (alumno.getSemestre() == semestre){
-
+                if (alumno.getSemestre() == semestre) {
+                    pluma.println(alumno.getCedula() + "," + alumno.getNombre() + "," + alumno.getApellido() + "," + alumno.getSemestre() + "," + alumno.getCorreo() + "," + alumno.getCelular());
                     
+                }
+            }
+            
+            pluma.close();
+            
+        } catch (FileNotFoundException e) {
+            System.out.println("No se pudo encontrar el archivo para generar el informe.");
+        }
 
-                    pluma.println("-----------------------------------------------------------");
-                    pluma.println("");
-                    pluma.println("Cédula: " + alumno.getCedula());
-                    pluma.println("Nombre: " + alumno.getNombre());
-                    pluma.println("Apellido: " + alumno.getApellido());
-                    pluma.println("Semestre: " + alumno.getSemestre());
-                    pluma.println("Correo: " + alumno.getCorreo());
-                    pluma.println("Celular: " + alumno.getCelular());
-                    pluma.println("");
-
-                    
-                    
-                    System.out.println("Reporte generado exitosamente");
+        // Mostrar mensaje de reporte creado exitosamente
+        if(archivo.length() != 0){
+            System.out.println("");
+            System.out.println("Reporte generado exitosamente");
+            System.out.println("");
         }
         
+        // Mostrar mensaje si no hay estudiantes registrados
+        if (misAlumnos.isEmpty()) {
+            System.out.println("No hay estudiantes registrados.");
         }
-        pluma.close();  
-        
-        if(misAlumnos.isEmpty()){
-            System.out.println("No hay estudiantes registrados");
-        }
-        
     }
     
     
-    public static void Menu(){
+    
+    /**
+     * Lee los datos de un archivo de texto y agrega los estudiantes a la lista.
+     *
+     * @param misAlumnos Lista de alumnos existentes.
+     * @throws FileNotFoundException Si no se encuentra el archivo.
+     * @throws IOException Si hay errores durante la lectura del archivo.
+     */
+    public static void leerArchivo(ArrayList<Alumno> misAlumnos) throws FileNotFoundException, IOException {
+        // Ubicación del archivo de datos
+        File archivo = new File("./data/Reporte.txt");
+
+        try (FileReader fr = new FileReader(archivo);
+             BufferedReader lector = new BufferedReader(fr)) {
+
+            String linea;
+            // Leer cada línea del archivo y procesar los datos
+            while ((linea = lector.readLine()) != null) {
+                String[] datos = linea.split(",");
+
+                String cedula = datos[0].trim();
+                String nombre = datos[1].trim();
+                String apellido = datos[2].trim();
+                String semestr = datos[3].trim();
+                String correo = datos[4].trim();
+                String celular = datos[5].trim();
+
+                int semestre = Integer.parseInt(semestr);
+
+                // Crear un objeto Alumno con los datos leídos y agregarlo a la lista
+                Alumno alumno = new Alumno(cedula, nombre, apellido, semestre, correo, celular);
+                misAlumnos.add(alumno);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("No se pudo encontrar el archivo de datos.");
+        } catch (IOException e) {
+            System.out.println("Error durante la lectura del archivo.");
+        }
+    }
+
+    
+    
+    /**
+     * Escribe los datos de los estudiantes en un archivo de texto.
+     *
+     * @param misAlumnos Lista de alumnos existentes.
+     * @param lector Scanner para entrada de datos.
+     * @throws FileNotFoundException Si no se puede crear o encontrar el archivo.
+     */
+    public static void escribirArchivo(ArrayList<Alumno> misAlumnos, Scanner lector) throws FileNotFoundException {
         
-        
-    //MENU de opciones
-        System.out.println("-----------MENU DE OPCIONES-----------");
+        // Ubicación del archivo de datos
+        File archivo = new File("./data/Reporte.txt");
+
+        try (PrintWriter pluma = new PrintWriter(archivo)) {
+            // Iterar a través de la lista de alumnos y escribir sus datos en el archivo
+            for (Alumno alumno : misAlumnos) {
+                // Formatear los datos del alumno en una línea y escribir en el archivo
+                String linea = alumno.getCedula() + "," + alumno.getNombre() + ","
+                              + alumno.getApellido() + "," + alumno.getSemestre() + ","
+                              + alumno.getCorreo() + "," + alumno.getCelular();
+                pluma.println(linea);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("No se pudo encontrar el archivo de datos.");
+        }
+    }
+    
+    
+    
+     /**
+     * Muestra el menú de opciones disponibles.
+     */
+    public static void Menu() {
+        System.out.println("======================================");
+        System.out.println("           MENU DE OPCIONES           ");
+        System.out.println("======================================");
         System.out.println("1. Insertar estudiante");
         System.out.println("2. Eliminar estudiante");
         System.out.println("3. Modificar estudiante");
         System.out.println("4. Consultar estudiante");
-        System.out.println("5. Obtener reporte por semestre");
-        System.out.println("6. Leer archivo");
-        System.out.println("7. Terminar programa");
-        System.out.println("--------------------------------------");
-        
-        
-}
-    
-    
-    
-    
+        System.out.println("5. Generar reporte por semestre");
+        System.out.println("6. Terminar programa");
+        System.out.println("======================================");
+    }
+
+
+
      /**
      * Método que permite agregar un estudiante a la lista de alumnos.
      *
@@ -538,33 +576,39 @@ public class ProyectoEstudiantes {
      *
      * @param misAlumnos Lista de alumnos existentes.
      */
-    public static void consultarEstudiante(ArrayList<Alumno> misAlumnos){
-        
-        //Primero se verifica que la lista de alumnos no este vacia
-        if (misAlumnos.isEmpty()) {
-            System.out.println("");
-            System.out.println("No se encuentra ningún estudiante registrado en el sistema en este momento.");
-            System.out.println("");
-            }else{
-                System.out.println("Registro Académico de Estudiantes");
-                System.out.println("=================================");
+    public static void consultarEstudiante(ArrayList<Alumno> misAlumnos) {
+    if (misAlumnos.isEmpty()) {
+        System.out.println("");
+        System.out.println("No se encuentra ningún estudiante registrado en el sistema en este momento.");
+        System.out.println("");
+    } else {
+        System.out.println("");
+        System.out.println("");
+        System.out.println("No.  |   Cédula      |      Nombre       |      Apellido     | Semestre |        Correo       |     Celular      |");
+        System.out.println("-----|---------------|-------------------|-------------------|----------|---------------------|------------------|");
 
-            //Recorremos los alumnos existentes y los mostramos    
-            for (int i = 0; i < misAlumnos.size(); i++) {
-                Alumno alumno = misAlumnos.get(i);
-                System.out.println("----------------------------");
-                System.out.println("Estudiante: " + (i+1));
-                System.out.println("Cédula: " + alumno.getCedula());
-                System.out.println("Nombre: " + alumno.getNombre());
-                System.out.println("Apellido: " + alumno.getApellido());
-                System.out.println("Semestre: " + alumno.getSemestre());
-                System.out.println("Correo: " + alumno.getCorreo());
-                System.out.println("Celular: " + alumno.getCelular());
-                System.out.println("----------------------------");
-                System.out.println("");
-            }
+        for (int i = 0; i < misAlumnos.size(); i++) {
+            Alumno alumno = misAlumnos.get(i);
+            String estudianteNum = String.format("%-4d", i + 1);
+            String cedula = String.format("%-13s", alumno.getCedula());
+            String nombre = String.format("%-17s", alumno.getNombre());
+            String apellido = String.format("%-17s", alumno.getApellido());
+            String semestre = String.format("%-8d", alumno.getSemestre());
+            String correo = String.format("%-19s", alumno.getCorreo());
+            String celular = String.format("%-16s", alumno.getCelular());
+
+            System.out.println(estudianteNum + " | " + cedula + " | " + nombre + " | " + apellido + " | " + semestre + " | " + correo + " | " + celular + " | ");
         }
+        System.out.println("");
+        System.out.println("");
+        System.out.println("");
     }
+}
+
+
+
+
+
      
      
     
