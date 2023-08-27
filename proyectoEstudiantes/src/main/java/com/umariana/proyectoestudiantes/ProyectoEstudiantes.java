@@ -52,7 +52,7 @@ public class ProyectoEstudiantes {
                 case 1: //Agregar estudiante
                     
                     agregarEstudiante(misAlumnos, new BufferedReader(new InputStreamReader(System.in)), lector);
-                    escribirArchivo(misAlumnos, lector);
+                    escribirArchivo(misAlumnos);
                    
                     break;
                     
@@ -60,7 +60,7 @@ public class ProyectoEstudiantes {
                 case 2: //Eliminar estudiante
                     
                     eliminarEstudiante(misAlumnos, new BufferedReader(new InputStreamReader(System.in)));
-                    escribirArchivo(misAlumnos, lector);
+                    escribirArchivo(misAlumnos);
                     
                     break;
                     
@@ -68,7 +68,7 @@ public class ProyectoEstudiantes {
                 case 3: //Modificar estudiante
                     
                     modificarEstudiante(misAlumnos, new BufferedReader(new InputStreamReader(System.in)), lector);
-                    escribirArchivo(misAlumnos, lector);
+                    escribirArchivo(misAlumnos);
                     
                     break;
                             
@@ -134,6 +134,9 @@ public class ProyectoEstudiantes {
             // Recorrer la lista de alumnos y generar el informe para el semestre especificado
             for (Alumno alumno : misAlumnos) {
                 if (alumno.getSemestre() == semestre) {
+                    if(archivo.length() == 0){
+                        pluma.println("Los alumnos del semestre " + semestre + " son: ");
+                    }
                     pluma.println(alumno.getCedula() + "," + alumno.getNombre() + "," + alumno.getApellido() + "," + alumno.getSemestre() + "," + alumno.getCorreo() + "," + alumno.getCelular());
                     
                 }
@@ -153,7 +156,7 @@ public class ProyectoEstudiantes {
         }
         
         // Mostrar mensaje si no hay estudiantes registrados
-        if (misAlumnos.isEmpty()) {
+        if (archivo.length() == 0) {
             System.out.println("No hay estudiantes registrados.");
         }
     }
@@ -168,6 +171,7 @@ public class ProyectoEstudiantes {
      * @throws IOException Si hay errores durante la lectura del archivo.
      */
     public static void leerArchivo(ArrayList<Alumno> misAlumnos) throws FileNotFoundException, IOException {
+        
         // Ubicación del archivo de datos
         File archivo = new File("./data/Reporte.txt");
 
@@ -176,7 +180,8 @@ public class ProyectoEstudiantes {
 
             String linea;
             // Leer cada línea del archivo y procesar los datos
-            while ((linea = lector.readLine()) != null) {
+            
+               while ((linea = lector.readLine()) != null) {
                 String[] datos = linea.split(",");
 
                 String cedula = datos[0].trim();
@@ -192,6 +197,7 @@ public class ProyectoEstudiantes {
                 Alumno alumno = new Alumno(cedula, nombre, apellido, semestre, correo, celular);
                 misAlumnos.add(alumno);
             }
+            
         } catch (FileNotFoundException e) {
             System.out.println("No se pudo encontrar el archivo de datos.");
         } catch (IOException e) {
@@ -205,10 +211,9 @@ public class ProyectoEstudiantes {
      * Escribe los datos de los estudiantes en un archivo de texto.
      *
      * @param misAlumnos Lista de alumnos existentes.
-     * @param lector Scanner para entrada de datos.
      * @throws FileNotFoundException Si no se puede crear o encontrar el archivo.
      */
-    public static void escribirArchivo(ArrayList<Alumno> misAlumnos, Scanner lector) throws FileNotFoundException {
+    public static void escribirArchivo(ArrayList<Alumno> misAlumnos) throws FileNotFoundException {
         
         // Ubicación del archivo de datos
         File archivo = new File("./data/Reporte.txt");
@@ -222,6 +227,7 @@ public class ProyectoEstudiantes {
                               + alumno.getCorreo() + "," + alumno.getCelular();
                 pluma.println(linea);
             }
+      
         } catch (FileNotFoundException e) {
             System.out.println("No se pudo encontrar el archivo de datos.");
         }
